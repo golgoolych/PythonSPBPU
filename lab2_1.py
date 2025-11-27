@@ -25,4 +25,4 @@ try:
     plt.ylabel('Средняя пенсия (руб)')
     plt.show()
 except Exception as e:
-    print(f"Ошибка: {e}")
+    raise Exception(f"Ошибка: {e}")
