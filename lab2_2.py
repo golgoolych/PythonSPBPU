@@ -12,7 +12,7 @@ class MyFile:
         if self.mode != 'read':
             raise PermissionError("Режим чтения файла не активирован.")
         try:
-            with open(self.name, 'r') as file:
+            with open(self.name, 'r', encoding='utf-8') as file:
                 return file.read()
         except FileNotFoundError:
             raise FileNotFoundError(f"Файл {self.name} не найден")
@@ -23,7 +23,7 @@ class MyFile:
             raise PermissionError("Режим записи в файл не активирован.")
         try:
             mode = 'w' if self.mode == 'write' else 'a'
-            with open(self.name, mode) as file:
+            with open(self.name, mode, encoding='utf-8') as file:
                 file.write(text)
         except Exception as e:
             raise Exception(f"Ошибка: {str(e)}")
@@ -31,11 +31,11 @@ class MyFile:
         if self.mode != 'url':
             raise PermissionError("Режим работы с URL не активирован.")
         try:
-            with requests.get(self.name) as response:
-                self.urltxt = response.text
-            return response.text
-        except Exception as e:
-            raise Exception(f"Ошибка: {str(e)}")
+            with requests.get(self.name, timeout=10) as response:
+                response.raise_for_status()
+                return response.text
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(f"Ошибка при загрузке URL: {str(e)}")
     def count_urls(self):
         if self.mode != 'url':
             raise PermissionError("Режим работы с URL не активирован.")
@@ -51,8 +51,9 @@ class MyFile:
             raise PermissionError("Режим работы с URL не активирован.")
         try:
             content = self.read_url()
-            with open(file, 'w') as f:
+            with open(file, 'w', encoding='utf-8') as f:
                 f.write(content)
         except Exception as e:
             raise Exception(f"Ошибка: {str(e)}")
+
             
