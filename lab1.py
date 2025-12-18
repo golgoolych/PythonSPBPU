@@ -24,5 +24,6 @@ while i < len(k):
                 else:
                     sport_spisok[sport] = 1
     i += 1
-genexp = [(z, sport_spisok[z]) for z in sorted(sport_spisok, key=sport_spisok.get, reverse=True)]
-print(genexp[0], genexp[1], genexp[2])
+a = [(z, sport_spisok[z]) for z in sorted(sport_spisok, key=sport_spisok.get, reverse=True)]
+
+print(a[0], a[1], a[2])
